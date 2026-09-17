@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Óptima de Monitores y TV | PPI y Distancia Ideal</title>
+  <meta name="description" content="Calcula la densidad de píxeles (PPI) y la distancia óptima para monitores y televisores según estándares THX y SMPTE.">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 2rem 1rem; display: flex; justify-content: center; }
+    .container { max-width: 800px; width: 100%; }
+    header { text-align: center; margin-bottom: 2rem; }
+    h1 { font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--accent); }
+    p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
+    .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-muted); }
+    input, select { width: 100%; background: #0b1120; border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 0.75rem; font-size: 1rem; outline: none; }
+    input:focus, select:focus { border-color: var(--accent); }
+    .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; text-align: center; }
+    .result-box { background: #0b1120; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    .result-box h3 { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .result-val { font-size: 1.6rem; font-weight: 700; color: var(--accent); }
+    .unit { font-size: 0.85rem; color: var(--text-muted); font-weight: normal; }
+    article { line-height: 1.6; color: #cbd5e1; }
+    article h2 { color: var(--text); margin: 1.5rem 0 0.5rem 0; font-size: 1.3rem; }
+    article p { margin-bottom: 1rem; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+
+<main class="container">
+  <header>
+    <h1>Calculadora Óptima de Pantallas</h1>
+    <p class="subtitle">Calculá la nitidez (PPI) y distancia visual ideal basada en estándares de cine y ergonomía.</p>
+  </header>
+
+  <!-- Herramienta interactiva (Above the fold) -->
+  <section class="card">
+    <div class="grid-inputs">
+      <div>
+        <label for="resolution">Resolución</label>
+        <select id="resolution">
+          <option value="1920x1080">Full HD (1920 x 1080)</option>
+          <option value="2560x1440" selected>2K QHD (2560 x 1440)</option>
+          <option value="3840x2160">4K Ultra HD (3840 x 2160)</option>
+          <option value="custom">Personalizada...</option>
+        </select>
+      </div>
+      <div>
+        <label for="size">Tamaño Diagonal (Pulgadas)</label>
+        <input type="number" id="size" value="27" min="10" max="120" step="0.5">
+      </div>
+      <div>
+        <label for="unitPref">Unidad de Distancia</label>
+        <select id="unitPref">
+          <option value="m" selected>Metros (m)</option>
+          <option value="in">Pulgadas (in)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div class="result-box">
+        <h3>Densidad</h3>
+        <div class="result-val" id="outPpi">-- <span class="unit">PPI</span></div>
+      </div>
+      <div class="result-box">
+        <h3>Distancia THX (Cine)</h3>
+        <div class="result-val" id="outThx">--</div>
+      </div>
+      <div class="result-box">
+        <h3>Distancia SMPTE (Uso Diario)</h3>
+        <div class="result-val" id="outSmpte">--</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bloque de contenido educativo y técnico (Blindaje SEO / Helpful Content) -->
+  <article>
+    <h2>¿Qué es la densidad de píxeles (PPI) y por qué importa?</h2>
+    <p>El valor PPI (Pixels Per Inch) mide la cantidad de píxeles individuales alojados en una pulgada lineal de pantalla. Cuanto mayor sea el PPI, más definida se percibe la imagen y menos visibles son los píxeles a simple vista. Para estaciones de trabajo y monitores de PC, una densidad entre 100 y 115 PPI se considera el estándar ergonómico óptimo sin requerir reescalado de interfaz.</p>
+
+    <h2>Diferencias entre el estándar THX y SMPTE</h2>
+    <p>El estándar cinematográfico THX busca una experiencia de máxima inmersión visual ocupando aproximadamente un ángulo de visión de 40 grados. Es ideal para configurar salas de cine en casa, videojuegos inmersivos o reproducción de películas en alta definición. Por otro lado, la directriz SMPTE utiliza un ángulo conservador de 30 grados, pensado para espacios multiuso, ofimática y tareas donde se busca evitar la fatiga visual prolongada.</p>
+  </article>
+</main>
+
+<script>
+  const resSelect = document.getElementById('resolution');
+  const sizeInput = document.getElementById('size');
+  const unitSelect = document.getElementById('unitPref');
+  const outPpi = document.getElementById('outPpi');
+  const outThx = document.getElementById('outThx');
+  const outSmpte = document.getElementById('outSmpte');
+
+  function calculate() {
+    let [w, h] = resSelect.value.split('x').map(Number);
+    const diag = parseFloat(sizeInput.value);
+    const unit = unitSelect.value;
+
+    if (!diag || diag <= 0) return;
+
+    // Cálculo de PPI
+    const ppi = Math.round(Math.sqrt((w * w) + (h * h)) / diag);
+    outPpi.innerHTML = `${ppi} <span class="unit">PPI</span>`;
+
+    // Distancias base en pulgadas
+    const thxInches = diag / 0.84;
+    const smpteInches = diag / 0.60;
+
+    if (unit === 'm') {
+      const thxMeters = (thxInches * 0.0254).toFixed(2);
+      const smpteMeters = (smpteInches * 0.0254).toFixed(2);
+      outThx.innerHTML = `${thxMeters} <span class="unit">m</span>`;
+      outSmpte.innerHTML = `${smpteMeters} <span class="unit">m</span>`;
+    } else {
+      outThx.innerHTML = `${Math.round(thxInches)} <span class="unit">in</span>`;
+      outSmpte.innerHTML = `${Math.round(smpteInches)} <span class="unit">in</span>`;
+    }
+  }
+
+  resSelect.addEventListener('change', calculate);
+  sizeInput.addEventListener('input', calculate);
+  unitSelect.addEventListener('change', calculate);
+
+  // Ejecución inicial automática
+  calculate();
+</script>
+
+</body>
+</html>
