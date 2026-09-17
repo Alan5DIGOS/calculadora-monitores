@@ -84,13 +84,26 @@
     </div>
   </section>
 
-  <!-- Bloque de contenido educativo y técnico (Blindaje SEO / Helpful Content) -->
   <article>
-    <h2>¿Qué es la densidad de píxeles (PPI) y por qué importa?</h2>
-    <p>El valor PPI (Pixels Per Inch) mide la cantidad de píxeles individuales alojados en una pulgada lineal de pantalla. Cuanto mayor sea el PPI, más definida se percibe la imagen y menos visibles son los píxeles a simple vista. Para estaciones de trabajo y monitores de PC, una densidad entre 100 y 115 PPI se considera el estándar ergonómico óptimo sin requerir reescalado de interfaz.</p>
+    <h2>Guía Completa: Cómo elegir el tamaño de pantalla y la distancia ideal</h2>
+    <p>Comprar un nuevo monitor para tu PC o un televisor inteligente es una inversión importante. Sin embargo, muchos usuarios cometen el error de elegir la pantalla más grande disponible sin considerar la densidad de píxeles (PPI) ni la distancia a la que se sentarán. Esta herramienta gratuita procesa las resoluciones y diagonales en milisegundos para ayudarte a encontrar el punto óptimo (sweet spot) donde la imagen es perfectamente nítida y el ángulo de visión no genera fatiga visual.</p>
 
-    <h2>Diferencias entre el estándar THX y SMPTE</h2>
-    <p>El estándar cinematográfico THX busca una experiencia de máxima inmersión visual ocupando aproximadamente un ángulo de visión de 40 grados. Es ideal para configurar salas de cine en casa, videojuegos inmersivos o reproducción de películas en alta definición. Por otro lado, la directriz SMPTE utiliza un ángulo conservador de 30 grados, pensado para espacios multiuso, ofimática y tareas donde se busca evitar la fatiga visual prolongada.</p>
+    <h3>¿Qué significa PPI (Densidad de píxeles) y cómo afecta tu visión?</h3>
+    <p>El valor PPI (Pixels Per Inch o Píxeles por Pulgada) mide la cantidad de píxeles individuales alojados en una pulgada lineal de pantalla. Cuanto mayor sea el PPI, más definida se percibe la imagen y menos visibles son los píxeles a simple vista. Para estaciones de trabajo, programación y monitores de PC, una densidad de entre 100 y 115 PPI se considera el estándar ergonómico óptimo. Un PPI demasiado bajo (ej. un monitor de 27 pulgadas con resolución 1080p que da unos 81 PPI) hará que los textos se vean borrosos y pixelados. Un PPI excesivamente alto obligará a usar el escalado de Windows para poder leer los menús.</p>
+
+    <h3>Diferencias entre los estándares cinematográficos: THX vs SMPTE</h3>
+    <p>Para calcular la distancia a la que debes colocar tu pantalla, nuestra calculadora utiliza dos de los estándares más respetados en la industria audiovisual:</p>
+    <ul>
+      <li><strong>Estándar THX (Cine y Gaming Inmersivo):</strong> Busca una experiencia de máxima inmersión visual ocupando aproximadamente un ángulo de visión de 40 grados del espectador. Es la métrica ideal para configurar salas de cine en casa (Home Theater), simuladores de carreras o para disfrutar de películas en 4K UHD.</li>
+      <li><strong>Estándar SMPTE (Uso Diario y Ofimática):</strong> La Sociedad de Ingenieros de Cine y Televisión recomienda un ángulo más conservador de 30 grados. Este es el cálculo ideal para escritorios de trabajo, salas de usos múltiples y entornos donde se busca evitar el cansancio en el cuello y la fatiga visual prolongada.</li>
+    </ul>
+
+    <h3>Preguntas Frecuentes (FAQ) sobre resoluciones</h3>
+    <h4>¿Es 1080p suficiente para un monitor de 27 pulgadas?</h4>
+    <p>Generalmente no es recomendable para tareas de lectura o productividad. Un monitor de 27" a 1080p ofrece una densidad de aproximadamente 81 PPI, lo que hace que los bordes de las letras se vean dentados a una distancia de escritorio normal (60 a 80 cm). Para 27 pulgadas, el estándar ideal es 2K QHD (2560x1440).</p>
+
+    <h4>¿A qué distancia debo poner un TV 4K de 65 pulgadas?</h4>
+    <p>Si buscas una inmersión tipo cine (THX), la distancia óptima es de aproximadamente 1.96 metros. Si prefieres un uso más relajado para ver televisión tradicional (SMPTE), la distancia recomendada se extiende a unos 2.75 metros.</p>
   </article>
 </main>
 
@@ -136,5 +149,42 @@
   calculate();
 </script>
 
+ <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Calculadora Óptima de Pantallas y Monitores",
+      "description": "Herramienta gratuita para calcular la densidad de píxeles (PPI) y la distancia visual óptima según los estándares THX y SMPTE.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "¿Es 1080p suficiente para un monitor de 27 pulgadas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No es recomendable para productividad. A 27 pulgadas, 1080p da 81 PPI, lo que causa textos borrosos. Lo ideal es 2K QHD (2560x1440)."
+        }
+      }, {
+        "@type": "Question",
+        "name": "¿A qué distancia debo poner un TV 4K de 65 pulgadas?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Para inmersión de cine (estándar THX), la distancia ideal es 1.96 metros. Para uso diario general (SMPTE), se recomiendan 2.75 metros."
+        }
+      }]
+    }
+  ]
+}
+</script> 
+  
 </body>
 </html>
