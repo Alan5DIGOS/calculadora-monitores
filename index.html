@@ -88,7 +88,63 @@
 
   .custom-res { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; margin-top: 8px; }
   .custom-res span { color: var(--text-dim); font-family: var(--font-mono); text-align: center; }
-  .custom-res.hidden { display: none; }
+  .hidden { display: none !important; }
+
+  /* ---------- Mode toggle ---------- */
+  .mode-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+  .mode-toggle button {
+    background: transparent; border: none; color: var(--text-mid); font-family: var(--font-mono);
+    font-size: 12.5px; padding: 9px 16px; cursor: pointer; border-right: 1px solid var(--line);
+  }
+  .mode-toggle button:last-child { border-right: none; }
+  .mode-toggle button.active { background: var(--panel-2); color: var(--smpte); font-weight: 600; }
+  .mode-toggle button:hover:not(.active) { color: var(--text); }
+
+  /* ---------- Reverse mode results ---------- */
+  .reverse-results { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  @media (max-width: 560px) { .reverse-results { grid-template-columns: 1fr; } }
+  .reverse-card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+  .rc-label { font-family: var(--font-mono); font-size: 11.5px; margin: 0 0 8px; }
+  .rc-value { font-family: var(--font-mono); font-weight: 700; font-size: 34px; margin: 0; line-height: 1; }
+  .rc-value .unit { font-size: 17px; color: var(--text-dim); font-weight: 400; }
+  .rc-sub { font-size: 12.5px; color: var(--text-mid); margin: 8px 0 0; }
+
+  /* ---------- Distance slider on ruler ---------- */
+  .ruler-slider {
+    position: absolute; left: 0; top: -9px; width: 100%; height: 20px;
+    -webkit-appearance: none; appearance: none; background: transparent; margin: 0; cursor: grab;
+  }
+  .ruler-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+    background: var(--text); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--text-dim); cursor: grab;
+  }
+  .ruler-slider::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%; background: var(--text); border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--text-dim); cursor: grab;
+  }
+  .ruler-slider::-webkit-slider-runnable-track { background: transparent; }
+  .ruler-slider::-moz-range-track { background: transparent; }
+  .my-status {
+    font-size: 13px; color: var(--text-mid); margin: 30px 0 0; padding-top: 14px; border-top: 1px solid var(--line-soft);
+  }
+  .my-status b { color: var(--text); font-family: var(--font-mono); }
+
+  /* ---------- Viewing-angle diagram ---------- */
+  .angle-diagram { display: block; margin: 0 auto 22px; max-width: 420px; width: 100%; height: auto; }
+
+  /* ---------- Compare card ---------- */
+  .compare-card h2 { font-size: 16px; margin: 0 0 4px; }
+  .compare-card .compare-sub { font-size: 13px; color: var(--text-dim); margin: 0 0 20px; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 620px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-col { background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+  .compare-col h3 { font-size: 13px; font-family: var(--font-mono); margin: 0 0 14px; color: var(--text-dim); }
+  .compare-col .field { margin-bottom: 12px; }
+  .compare-col .field label { font-size: 10.5px; }
+  .cmp-results { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .cmp-row { display: flex; justify-content: space-between; padding: 5px 0; font-size: 13px; color: var(--text-mid); }
+  .cmp-row b { font-family: var(--font-mono); color: var(--text); font-weight: 600; }
+  .cmp-winner { font-size: 11.5px; color: var(--smpte); margin-top: 10px; font-family: var(--font-mono); }
 
   /* ---------- Ruler readout ---------- */
   .readout { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line-soft); }
@@ -97,7 +153,7 @@
   .ppi-label { font-size: 13px; color: var(--text-dim); }
   .ppi-note { font-size: 12.5px; color: var(--text-mid); margin: 4px 0 0; }
 
-  .ruler-wrap { position: relative; padding: 6px 22px 54px; }
+  .ruler-wrap { position: relative; padding: 6px 22px 88px; }
   .ruler-track {
     position: relative; height: 3px; background: var(--line);
     border-radius: 2px;
@@ -115,10 +171,15 @@
   }
   .ruler-tag {
     position: absolute; top: 16px; transform: translateX(-50%);
-    text-align: center; white-space: nowrap; transition: left 0.25s ease;
+    text-align: center; white-space: nowrap; transition: left 0.25s ease, top 0.15s ease;
   }
   .ruler-tag .val { font-family: var(--font-mono); font-weight: 600; font-size: 15px; display: block; }
   .ruler-tag .name { font-size: 10.5px; color: var(--text-dim); text-transform: none; display: block; margin-top: 1px; }
+  .ruler-tag.tag-row2 { top: 52px; }
+  .ruler-tag.tag-row2::before {
+    content: ''; position: absolute; left: 50%; top: -22px; width: 1px; height: 20px;
+    background: var(--line); transform: translateX(-50%);
+  }
 
   .legend { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 8px; }
   .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--text-mid); }
@@ -173,6 +234,10 @@
 <main class="wrap">
 
   <section class="calc-card" aria-label="Calculadora">
+    <div class="mode-toggle" role="tablist">
+      <button type="button" data-mode="size" class="active">Por tamaño</button>
+      <button type="button" data-mode="distance">Por distancia</button>
+    </div>
     <div class="calc-grid">
       <div class="field">
         <label for="resolution">Resolución</label>
@@ -192,9 +257,13 @@
           <input type="number" id="customH" placeholder="Alto px" min="1">
         </div>
       </div>
-      <div class="field">
+      <div class="field mode-field mode-size">
         <label for="size">Tamaño diagonal (pulgadas)</label>
         <input type="number" id="size" value="27" min="5" max="150" step="0.5">
+      </div>
+      <div class="field mode-field mode-distance hidden">
+        <label for="distance">Distancia disponible</label>
+        <input type="number" id="distance" value="1.5" min="0.1" step="0.1">
       </div>
       <div class="field">
         <label for="unitPref">Unidad de distancia</label>
@@ -205,7 +274,7 @@
       </div>
     </div>
 
-    <div class="readout">
+    <div class="readout" id="readoutSize">
       <div class="ppi-row">
         <span class="ppi-value" id="outPpi">—</span>
         <div>
@@ -217,6 +286,7 @@
       <div class="ruler-wrap">
         <span class="ruler-end start">👁</span>
         <div class="ruler-track" id="rulerTrack"></div>
+        <input type="range" class="ruler-slider" id="myDistanceSlider" min="0" max="100" value="50" step="0.1" aria-label="Tu distancia de visión">
         <span class="ruler-end finish">▭</span>
       </div>
 
@@ -225,7 +295,76 @@
         <div class="legend-item"><span class="legend-dot" style="background:var(--smpte)"></span>SMPTE — uso diario (30°)</div>
         <div class="legend-item"><span class="legend-dot" style="background:var(--thx)"></span>THX — cine inmersivo (40°)</div>
       </div>
+
+      <p class="my-status" id="myStatus">Arrastrá el punto blanco de la regla para marcar a qué distancia te sentás vos.</p>
     </div>
+
+    <div class="reverse-results hidden" id="readoutDistance">
+      <div class="reverse-card">
+        <p class="rc-label" style="color:var(--thx)">THX — tamaño recomendado</p>
+        <p class="rc-value"><span id="revThxSize">—</span><span class="unit">"</span></p>
+        <p class="rc-sub"><span id="revThxPpi">—</span> PPI con la resolución elegida</p>
+      </div>
+      <div class="reverse-card">
+        <p class="rc-label" style="color:var(--smpte)">SMPTE — tamaño recomendado</p>
+        <p class="rc-value"><span id="revSmpteSize">—</span><span class="unit">"</span></p>
+        <p class="rc-sub"><span id="revSmptePpi">—</span> PPI con la resolución elegida</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="calc-card compare-card" aria-label="Comparar dos pantallas">
+    <h2>Comparar dos pantallas</h2>
+    <p class="compare-sub">Poné una junto a la otra para ver cuál te conviene más.</p>
+    <div class="compare-grid">
+      <div class="compare-col" data-col="A">
+        <h3>Pantalla A</h3>
+        <div class="field">
+          <label>Resolución</label>
+          <select class="cmp-res">
+            <option value="1920x1080">Full HD (1920 × 1080)</option>
+            <option value="2560x1440" selected>QHD / 2K (2560 × 1440)</option>
+            <option value="3440x1440">UWQHD Ultrawide (3440 × 1440)</option>
+            <option value="3840x2160">4K UHD (3840 × 2160)</option>
+            <option value="5120x2880">5K (5120 × 2880)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tamaño diagonal (pulgadas)</label>
+          <input type="number" class="cmp-size" value="27" min="5" max="150" step="0.5">
+        </div>
+        <div class="cmp-results">
+          <div class="cmp-row"><span>PPI</span><b class="cmp-ppi">—</b></div>
+          <div class="cmp-row"><span>Retina</span><b class="cmp-retina">—</b></div>
+          <div class="cmp-row"><span>SMPTE</span><b class="cmp-smpte">—</b></div>
+          <div class="cmp-row"><span>THX</span><b class="cmp-thx">—</b></div>
+        </div>
+      </div>
+      <div class="compare-col" data-col="B">
+        <h3>Pantalla B</h3>
+        <div class="field">
+          <label>Resolución</label>
+          <select class="cmp-res">
+            <option value="1920x1080">Full HD (1920 × 1080)</option>
+            <option value="2560x1440">QHD / 2K (2560 × 1440)</option>
+            <option value="3440x1440">UWQHD Ultrawide (3440 × 1440)</option>
+            <option value="3840x2160" selected>4K UHD (3840 × 2160)</option>
+            <option value="5120x2880">5K (5120 × 2880)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tamaño diagonal (pulgadas)</label>
+          <input type="number" class="cmp-size" value="32" min="5" max="150" step="0.5">
+        </div>
+        <div class="cmp-results">
+          <div class="cmp-row"><span>PPI</span><b class="cmp-ppi">—</b></div>
+          <div class="cmp-row"><span>Retina</span><b class="cmp-retina">—</b></div>
+          <div class="cmp-row"><span>SMPTE</span><b class="cmp-smpte">—</b></div>
+          <div class="cmp-row"><span>THX</span><b class="cmp-thx">—</b></div>
+        </div>
+      </div>
+    </div>
+    <p class="cmp-winner" id="cmpWinner"></p>
   </section>
 
   <article class="content">
@@ -238,6 +377,21 @@
 
     <h3>Diferencias entre los estándares cinematográficos: THX vs SMPTE</h3>
     <p>Para calcular la distancia a la que conviene colocar tu pantalla, esta calculadora usa dos de los estándares más respetados en la industria audiovisual:</p>
+
+    <svg class="angle-diagram" viewBox="0 0 420 200" role="img" aria-label="Diagrama del ángulo de visión: el ojo en el centro, con dos ángulos abriéndose hacia la pantalla, 40 grados para THX y 30 grados para SMPTE">
+      <line x1="70" y1="100" x2="70" y2="20" stroke="var(--thx)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.8" transform="rotate(-20 70 100)"/>
+      <line x1="70" y1="100" x2="70" y2="20" stroke="var(--thx)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.8" transform="rotate(20 70 100)"/>
+      <line x1="70" y1="100" x2="70" y2="20" stroke="var(--smpte)" stroke-width="1.5" stroke-dasharray="4 3" transform="rotate(-15 70 100)"/>
+      <line x1="70" y1="100" x2="70" y2="20" stroke="var(--smpte)" stroke-width="1.5" stroke-dasharray="4 3" transform="rotate(15 70 100)"/>
+      <path d="M 70 100 L 97.6 25.8 A 80 80 0 0 1 42.4 25.8 Z" fill="var(--thx)" opacity="0.08"/>
+      <path d="M 70 100 L 90.7 20.7 A 80 80 0 0 1 49.3 20.7 Z" fill="var(--smpte)" opacity="0.10"/>
+      <circle cx="70" cy="100" r="4" fill="var(--text)"/>
+      <text x="70" y="122" text-anchor="middle" font-size="11" fill="var(--text-dim)" font-family="var(--font-mono)">vos</text>
+      <rect x="345" y="30" width="10" height="140" rx="2" fill="var(--panel-2)" stroke="var(--text-dim)"/>
+      <text x="360" y="104" font-size="11" fill="var(--text-dim)" font-family="var(--font-mono)">pantalla</text>
+      <text x="120" y="40" font-size="12" fill="var(--thx)" font-family="var(--font-mono)" font-weight="600">40°</text>
+      <text x="120" y="160" font-size="12" fill="var(--smpte)" font-family="var(--font-mono)" font-weight="600">30°</text>
+    </svg>
 
     <div class="standard-grid">
       <div class="standard-card">
@@ -268,6 +422,15 @@
 
     <h4>¿Qué es la distancia Retina y para qué sirve?</h4>
     <p>Es la distancia mínima a la que podés sentarte sin distinguir píxeles individuales. En un 4K de 27" (≈163 PPI) ronda los 53 cm; en un Full HD de 27" (≈81 PPI) sube a casi 108 cm. Si tu escritorio es chico, priorizá una resolución con distancia Retina menor a la distancia real a la que vas a sentarte.</p>
+
+    <h4>¿Cuál es el PPI ideal para diseño gráfico y edición de fotos?</h4>
+    <p>Para trabajo de precisión visual —retoque fotográfico, diseño gráfico, edición de video— conviene apuntar a 130-160 PPI o más, bastante por encima del estándar de oficina (100-115 PPI). A esa densidad los detalles finos, las curvas de color y el antialiasing de tipografías se ven fieles a como saldrán impresos o exportados. Un 27" en 4K (≈163 PPI) o un 24" en QHD (≈122 PPI) son puntos de partida típicos para este uso.</p>
+
+    <h4>¿A qué distancia debo sentarme para gaming competitivo?</h4>
+    <p>En títulos competitivos (shooters, MOBAs) la prioridad no es la inmersión sino el campo de visión y el tiempo de reacción, así que muchos jugadores se sientan incluso más cerca que la distancia THX recomendada —a veces a la distancia Retina o un poco más—. Esto agranda el objetivo visual y reduce el movimiento ocular, aunque a costa de ver más notoria la trama de píxeles si el monitor tiene poca densidad. Por eso los monitores competitivos suelen preferir tamaños más chicos (24"-27") con resoluciones Full HD o QHD, priorizando la tasa de refresco sobre el PPI.</p>
+
+    <h4>¿Qué densidad de píxeles necesito en un monitor 4K de 32 pulgadas?</h4>
+    <p>Un 4K (3840×2160) en 32" da aproximadamente 138 PPI, más que suficiente para productividad y bastante cómodo incluso sin escalado agresivo de Windows/macOS. Es una combinación popular precisamente porque cae en el rango ideal de 100-115+ PPI sin exigir una GPU tan potente como un 4K en pantallas más chicas (donde el PPI sube y el margen de escalado se reduce).</p>
   </article>
 
   <footer>
@@ -285,16 +448,39 @@
   const customW = document.getElementById('customW');
   const customH = document.getElementById('customH');
   const sizeInput = document.getElementById('size');
+  const distanceInput = document.getElementById('distance');
   const unitSelect = document.getElementById('unitPref');
   const outPpi = document.getElementById('outPpi');
   const ppiNote = document.getElementById('ppiNote');
   const rulerTrack = document.getElementById('rulerTrack');
+  const readoutSize = document.getElementById('readoutSize');
+  const readoutDistance = document.getElementById('readoutDistance');
+  const myDistanceSlider = document.getElementById('myDistanceSlider');
+  const myStatus = document.getElementById('myStatus');
+
+  let mode = 'size';
+  let lastPoints = [];
+  let lastMax = 1;
+
+  document.querySelectorAll('.mode-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      mode = btn.dataset.mode;
+      document.querySelector('.mode-size').classList.toggle('hidden', mode !== 'size');
+      document.querySelector('.mode-distance').classList.toggle('hidden', mode !== 'distance');
+      readoutSize.classList.toggle('hidden', mode !== 'size');
+      readoutDistance.classList.toggle('hidden', mode !== 'distance');
+      calculate();
+    });
+  });
 
   resSelect.addEventListener('change', () => {
     customRes.classList.toggle('hidden', resSelect.value !== 'custom');
     calculate();
   });
-  [sizeInput, unitSelect, customW, customH].forEach(el => el.addEventListener('input', calculate));
+  [sizeInput, distanceInput, unitSelect, customW, customH].forEach(el => el.addEventListener('input', calculate));
+  myDistanceSlider.addEventListener('input', updateMyStatus);
 
   function getWH() {
     if (resSelect.value === 'custom') {
@@ -309,7 +495,17 @@
     return Math.round(inches) + ' in';
   }
 
+  function computeMetrics(w, h, diag) {
+    const ppi = Math.sqrt((w * w) + (h * h)) / diag;
+    const thxInches = diag / 0.84;
+    const smpteInches = diag / 0.60;
+    const retinaInches = (1 / ppi) * 3438;
+    return { ppi, thxInches, smpteInches, retinaInches };
+  }
+
   function calculate() {
+    if (mode === 'distance') { calculateDistance(); return; }
+
     const [w, h] = getWH();
     const diag = parseFloat(sizeInput.value);
     const unit = unitSelect.value;
@@ -321,18 +517,12 @@
       return;
     }
 
-    const ppi = Math.sqrt((w * w) + (h * h)) / diag;
+    const { ppi, thxInches, smpteInches, retinaInches } = computeMetrics(w, h, diag);
     outPpi.textContent = Math.round(ppi);
 
     if (ppi < 90) ppiNote.textContent = 'Densidad baja: los bordes de texto pueden verse dentados de cerca.';
     else if (ppi < 140) ppiNote.textContent = 'Densidad estándar de escritorio: buen punto para productividad.';
     else ppiNote.textContent = 'Densidad alta: texto e imágenes muy nítidos, incluso de cerca.';
-
-    // Distancias en pulgadas
-    const thxInches = diag / 0.84;      // ~1.2x diagonal, ángulo 40°
-    const smpteInches = diag / 0.60;    // ~1.6x diagonal, ángulo 30°
-    const pixelPitchInches = 1 / ppi;
-    const retinaInches = pixelPitchInches * 3438; // 1 arcominuto, visión 20/20
 
     renderRuler([
       { name: 'Retina', value: retinaInches, color: 'var(--retina)' },
@@ -341,29 +531,117 @@
     ], unit);
   }
 
+  function calculateDistance() {
+    const [w, h] = getWH();
+    const dist = parseFloat(distanceInput.value);
+    const unit = unitSelect.value;
+    if (!dist || dist <= 0 || !w || !h) return;
+
+    const distInches = unit === 'm' ? dist / 0.0254 : dist;
+    const diagThx = distInches * 0.84;
+    const diagSmpte = distInches * 0.60;
+    const ppiThx = Math.sqrt((w * w) + (h * h)) / diagThx;
+    const ppiSmpte = Math.sqrt((w * w) + (h * h)) / diagSmpte;
+
+    document.getElementById('revThxSize').textContent = diagThx.toFixed(1);
+    document.getElementById('revThxPpi').textContent = Math.round(ppiThx);
+    document.getElementById('revSmpteSize').textContent = diagSmpte.toFixed(1);
+    document.getElementById('revSmptePpi').textContent = Math.round(ppiSmpte);
+  }
+
   function renderRuler(points, unit) {
     const max = Math.max(...points.map(p => p.value)) * 1.12;
+    lastMax = max;
+    lastPoints = points.slice().sort((a, b) => a.value - b.value);
     rulerTrack.innerHTML = '';
-    points
-      .slice()
-      .sort((a, b) => a.value - b.value)
-      .forEach(p => {
-        const pct = (p.value / max) * 100;
-        const marker = document.createElement('div');
-        marker.className = 'ruler-marker';
-        marker.style.left = pct + '%';
-        marker.style.background = p.color;
-        rulerTrack.appendChild(marker);
+    const trackWidth = rulerTrack.clientWidth || 300;
+    const minGapPx = 64; // ancho mínimo para que dos etiquetas no se pisen
+    let lastPlacedPx = -Infinity;
 
-        const tag = document.createElement('div');
-        tag.className = 'ruler-tag';
-        tag.style.left = pct + '%';
-        tag.innerHTML = `<span class="val" style="color:${p.color}">${fmtDistance(p.value, unit)}</span><span class="name">${p.name}</span>`;
-        rulerTrack.appendChild(tag);
-      });
+    lastPoints.forEach(p => {
+      const pct = (p.value / max) * 100;
+      const curPx = (pct / 100) * trackWidth;
+
+      const marker = document.createElement('div');
+      marker.className = 'ruler-marker';
+      marker.style.left = pct + '%';
+      marker.style.background = p.color;
+      rulerTrack.appendChild(marker);
+
+      const tag = document.createElement('div');
+      tag.className = 'ruler-tag';
+      tag.style.left = pct + '%';
+      const collides = curPx - lastPlacedPx < minGapPx;
+      if (collides) {
+        tag.classList.add('tag-row2');
+      } else {
+        lastPlacedPx = curPx;
+      }
+      tag.innerHTML = `<span class="val" style="color:${p.color}">${fmtDistance(p.value, unit)}</span><span class="name">${p.name}</span>`;
+      rulerTrack.appendChild(tag);
+    });
+
+    myDistanceSlider.max = max;
+    if (parseFloat(myDistanceSlider.value) > max || !myDistanceSlider.dataset.touched) {
+      myDistanceSlider.value = lastPoints[Math.floor(lastPoints.length / 2)]?.value || max / 2;
+    }
+    updateMyStatus();
+  }
+
+  function updateMyStatus() {
+    myDistanceSlider.dataset.touched = '1';
+    if (!lastPoints.length) return;
+    const val = parseFloat(myDistanceSlider.value);
+    const unit = unitSelect.value;
+    const dText = fmtDistance(val, unit);
+
+    let statusText;
+    if (val < lastPoints[0].value) {
+      statusText = `A <b>${dText}</b> estás más cerca que el límite ${lastPoints[0].name} — vas a distinguir píxeles individuales.`;
+    } else if (val >= lastPoints[lastPoints.length - 1].value) {
+      statusText = `A <b>${dText}</b> estás más lejos que ${lastPoints[lastPoints.length - 1].name} — la pantalla puede sentirse chica para esa distancia.`;
+    } else {
+      let i = 0;
+      while (i < lastPoints.length - 1 && val >= lastPoints[i + 1].value) i++;
+      statusText = `A <b>${dText}</b> estás entre ${lastPoints[i].name} y ${lastPoints[i + 1].name}.`;
+    }
+    myStatus.innerHTML = statusText;
+  }
+
+  // ---------- Comparador ----------
+  const compareCols = document.querySelectorAll('.compare-col');
+  compareCols.forEach(col => {
+    col.querySelector('.cmp-res').addEventListener('change', calculateCompare);
+    col.querySelector('.cmp-size').addEventListener('input', calculateCompare);
+  });
+
+  function calculateCompare() {
+    const unit = unitSelect.value;
+    const results = [];
+    compareCols.forEach(col => {
+      const [w, h] = col.querySelector('.cmp-res').value.split('x').map(Number);
+      const diag = parseFloat(col.querySelector('.cmp-size').value);
+      if (!diag || diag <= 0) return;
+      const { ppi, thxInches, smpteInches, retinaInches } = computeMetrics(w, h, diag);
+      col.querySelector('.cmp-ppi').textContent = Math.round(ppi);
+      col.querySelector('.cmp-retina').textContent = fmtDistance(retinaInches, unit);
+      col.querySelector('.cmp-smpte').textContent = fmtDistance(smpteInches, unit);
+      col.querySelector('.cmp-thx').textContent = fmtDistance(thxInches, unit);
+      results.push({ col: col.dataset.col, ppi });
+    });
+    const winnerEl = document.getElementById('cmpWinner');
+    if (results.length === 2) {
+      const [a, b] = results;
+      if (a.ppi === b.ppi) winnerEl.textContent = 'Ambas tienen la misma densidad de píxeles.';
+      else {
+        const winner = a.ppi > b.ppi ? a : b;
+        winnerEl.textContent = `Pantalla ${winner.col} es más nítida (mayor PPI).`;
+      }
+    }
   }
 
   calculate();
+  calculateCompare();
 })();
 </script>
 
@@ -396,6 +674,21 @@
           "@type": "Question",
           "name": "¿Qué es la distancia Retina y para qué sirve?",
           "acceptedAnswer": { "@type": "Answer", "text": "Es la distancia mínima a la que un ojo 20/20 deja de distinguir píxeles individuales. En un 4K de 27 pulgadas ronda los 53 centímetros; en un Full HD de 27 pulgadas sube a casi 108 centímetros." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuál es el PPI ideal para diseño gráfico y edición de fotos?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Para trabajo de precisión visual conviene 130-160 PPI o más, por encima del estándar de oficina de 100-115 PPI. Un 27 pulgadas en 4K (≈163 PPI) o un 24 pulgadas en QHD (≈122 PPI) son puntos de partida típicos." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿A qué distancia debo sentarme para gaming competitivo?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Muchos jugadores competitivos se sientan más cerca que la distancia THX recomendada para agrandar el objetivo visual y reducir el movimiento ocular, priorizando tasa de refresco sobre densidad de píxeles con monitores de 24 a 27 pulgadas en Full HD o QHD." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué densidad de píxeles necesito en un monitor 4K de 32 pulgadas?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Un 4K de 32 pulgadas da aproximadamente 138 PPI, dentro del rango ideal de 100 a 115+ PPI para productividad sin exigir tanta potencia de GPU como un 4K en pantallas más chicas." }
         }
       ]
     }
