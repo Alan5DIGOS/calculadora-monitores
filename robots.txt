@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alan5digos.github.io/calculadora-monitores/sitemap.xml
