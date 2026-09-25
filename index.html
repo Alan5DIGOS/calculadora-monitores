@@ -129,6 +129,22 @@
   }
   .my-status b { color: var(--text); font-family: var(--font-mono); }
 
+  /* ---------- Vista cenital (FOV) ---------- */
+  .fov-section { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--line-soft); }
+  .fov-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+  .fov-title { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+  .curve-toggle {
+    display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-mid);
+    cursor: pointer; font-family: var(--font-mono); user-select: none;
+  }
+  .curve-toggle input { accent-color: var(--smpte); width: 14px; height: 14px; cursor: pointer; }
+  .fov-diagram {
+    width: 100%; height: auto; display: block; background: var(--panel-2);
+    border: 1px solid var(--line); border-radius: 10px;
+  }
+  .fov-angle { text-align: center; font-family: var(--font-mono); font-weight: 700; font-size: 22px; margin: 14px 0 0; }
+  .fov-angle-note { display: block; font-size: 12px; color: var(--text-dim); font-weight: 400; margin-top: 5px; font-family: var(--font-head); }
+
   /* ---------- Viewing-angle diagram ---------- */
   .angle-diagram { display: block; margin: 0 auto 22px; max-width: 420px; width: 100%; height: auto; }
 
@@ -297,6 +313,18 @@
       </div>
 
       <p class="my-status" id="myStatus">Arrastrá el punto blanco de la regla para marcar a qué distancia te sentás vos.</p>
+
+      <div class="fov-section">
+        <div class="fov-header">
+          <span class="fov-title">Vista cenital — tu campo de visión real</span>
+          <label class="curve-toggle">
+            <input type="checkbox" id="curvedToggle">
+            <span>Pantalla curva</span>
+          </label>
+        </div>
+        <svg class="fov-diagram" id="fovDiagram" viewBox="0 0 400 300" role="img" aria-label="Vista desde arriba de tu posición respecto al ancho de la pantalla"></svg>
+        <p class="fov-angle"><span id="fovAngleValue">—</span>°<span class="fov-angle-note" id="fovAngleNote"></span></p>
+      </div>
     </div>
 
     <div class="reverse-results hidden" id="readoutDistance">
@@ -457,6 +485,11 @@
   const readoutDistance = document.getElementById('readoutDistance');
   const myDistanceSlider = document.getElementById('myDistanceSlider');
   const myStatus = document.getElementById('myStatus');
+  const fovDiagram = document.getElementById('fovDiagram');
+  const curvedToggle = document.getElementById('curvedToggle');
+  const fovAngleValue = document.getElementById('fovAngleValue');
+  const fovAngleNote = document.getElementById('fovAngleNote');
+  curvedToggle.addEventListener('change', () => renderFOV(parseFloat(myDistanceSlider.value)));
 
   let mode = 'size';
   let lastPoints = [];
@@ -606,6 +639,56 @@
       statusText = `A <b>${dText}</b> estás entre ${lastPoints[i].name} y ${lastPoints[i + 1].name}.`;
     }
     myStatus.innerHTML = statusText;
+    renderFOV(val);
+  }
+
+  function renderFOV(distanceInches) {
+    if (mode !== 'size') return;
+    const [w, h] = getWH();
+    const diag = parseFloat(sizeInput.value);
+    if (!w || !h || !diag || !distanceInches) { fovDiagram.innerHTML = ''; return; }
+
+    const diagPx = Math.sqrt((w * w) + (h * h));
+    const screenWidthInches = diag * (w / diagPx);
+
+    const angleRad = 2 * Math.atan((screenWidthInches / 2) / distanceInches);
+    const angleDeg = angleRad * (180 / Math.PI);
+    fovAngleValue.textContent = angleDeg.toFixed(1);
+    let note;
+    if (angleDeg < 24) note = 'campo de visión chico — la pantalla ocupa poco de tu vista';
+    else if (angleDeg < 34) note = 'zona SMPTE — cómodo para uso prolongado';
+    else if (angleDeg < 46) note = 'zona THX — inmersivo, ideal para cine y juegos';
+    else note = 'campo muy amplio — puede resultar incómodo sostenido en el tiempo';
+    fovAngleNote.textContent = note;
+
+    const vbW = 400, vbH = 300;
+    const marginX = 30, marginTop = 24, marginBottom = 46;
+    const scale = Math.min((vbH - marginTop - marginBottom) / distanceInches, (vbW - marginX * 2) / screenWidthInches);
+
+    const eyeX = vbW / 2, eyeY = vbH - marginBottom;
+    const screenY = eyeY - distanceInches * scale;
+    const halfW = (screenWidthInches * scale) / 2;
+    const x1 = eyeX - halfW, x2 = eyeX + halfW;
+
+    const curved = curvedToggle.checked;
+    const sagitta = curved ? halfW * 0.16 : 0;
+    const screenPath = curved
+      ? `M ${x1} ${screenY} Q ${eyeX} ${screenY - sagitta} ${x2} ${screenY}`
+      : `M ${x1} ${screenY} L ${x2} ${screenY}`;
+
+    const wedgePath = curved
+      ? `M ${eyeX} ${eyeY} L ${x1} ${screenY} Q ${eyeX} ${screenY - sagitta} ${x2} ${screenY} Z`
+      : `M ${eyeX} ${eyeY} L ${x1} ${screenY} L ${x2} ${screenY} Z`;
+
+    fovDiagram.innerHTML = `
+      <path d="${wedgePath}" fill="var(--smpte)" opacity="0.07"></path>
+      <line x1="${eyeX}" y1="${eyeY}" x2="${x1}" y2="${screenY}" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"></line>
+      <line x1="${eyeX}" y1="${eyeY}" x2="${x2}" y2="${screenY}" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"></line>
+      <path d="${screenPath}" fill="none" stroke="var(--smpte)" stroke-width="4" stroke-linecap="round"></path>
+      <circle cx="${eyeX}" cy="${eyeY}" r="5" fill="var(--text)"></circle>
+      <text x="${eyeX}" y="${eyeY + 18}" text-anchor="middle" font-size="11" fill="var(--text-dim)" font-family="var(--font-mono)">vos</text>
+      <text x="${eyeX}" y="${screenY - 10}" text-anchor="middle" font-size="11" fill="var(--text-dim)" font-family="var(--font-mono)">${screenWidthInches.toFixed(1)}" de ancho</text>
+    `;
   }
 
   // ---------- Comparador ----------
